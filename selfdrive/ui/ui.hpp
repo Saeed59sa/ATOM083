@@ -35,6 +35,17 @@
 #define COLOR_WHITE_ALPHA(x) nvgRGBA(255, 255, 255, x)
 #define COLOR_YELLOW nvgRGBA(218, 202, 37, 255)
 #define COLOR_RED nvgRGBA(201, 34, 49, 255)
+#define COLOR_OCHRE nvgRGBA(218, 111, 37, 255)
+#define COLOR_OCHRE_ALPHA(x) nvgRGBA(218, 111, 37, x)
+#define COLOR_GREEN nvgRGBA(0, 255, 0, 255)
+#define COLOR_GREEN_ALPHA(x) nvgRGBA(0, 255, 0, x)
+#define COLOR_BLUE nvgRGBA(0, 0, 255, 255)
+#define COLOR_BLUE_ALPHA(x) nvgRGBA(0, 0, 255, x)
+#define COLOR_ORANGE nvgRGBA(255, 175, 3, 255)
+#define COLOR_ORANGE_ALPHA(x) nvgRGBA(255, 175, 3, x)
+#define COLOR_RED_ALPHA(x) nvgRGBA(201, 34, 49, x)
+#define COLOR_YELLOW_ALPHA(x) nvgRGBA(218, 202, 37, x)
+#define COLOR_GREY nvgRGBA(191, 191, 191, 1)
 
 #define UI_BUF_COUNT 4
 
@@ -75,14 +86,15 @@ typedef enum UIStatus {
 static std::map<UIStatus, NVGcolor> bg_colors = {
 #ifndef QT_GUI_LIB
   {STATUS_OFFROAD, nvgRGBA(0x07, 0x23, 0x39, 0x31)},
-#else
-  {STATUS_OFFROAD, nvgRGBA(0x0, 0x0, 0x0, 0xef)},
+s#else
+  {STATUS_OFFROAD, nvgRGBA(0x10, 0x10, 0x10, 0xf1)},
 #endif
-  {STATUS_DISENGAGED, nvgRGBA(0x17, 0x33, 0x49, 0xc8)},
-  {STATUS_ENGAGED, nvgRGBA(0x17, 0x86, 0x44, 0x51)},
-  {STATUS_WARNING, nvgRGBA(0xDA, 0x6F, 0x25, 0x51)},
-  {STATUS_ALERT, nvgRGBA(0xC9, 0x22, 0x31, 0x31)},
+  {STATUS_DISENGAGED, nvgRGBA(0x78, 0x78, 0x78, 0xc8)},
+  {STATUS_ENGAGED, nvgRGBA(0x00, 0x64, 0x99, 0xf1)},
+  {STATUS_WARNING, nvgRGBA(0xDA, 0x6F, 0x25, 0xc8)},
+  {STATUS_ALERT, nvgRGBA(0xab, 0x20, 0x00, 0xc8)},
 };
+
 
 typedef struct {
   float x, y;

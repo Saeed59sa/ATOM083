@@ -42,6 +42,7 @@ class CarController():
     self.apply_steer_last = 0
     self.car_fingerprint = CP.carFingerprint
     self.steer_rate_limited = False
+    self.last_lead_distance = 0
     self.last_resume_frame = 0
 
   def update(self, enabled, CS, frame, actuators, pcm_cancel_cmd, visual_alert,
@@ -95,7 +96,7 @@ class CarController():
 
     # 20 Hz LFA MFA message
     if frame % 5 == 0 and self.car_fingerprint in [CAR.SONATA, CAR.PALISADE, CAR.IONIQ, CAR.KIA_NIRO_EV,
-                                                   CAR.IONIQ_EV_2020, CAR.KIA_CEED, CAR.KIA_SELTOS]:
+                                                   CAR.IONIQ_EV_2020, CAR.KIA_CEED, CAR.KIA_SELTOS, CAR.GRANDEUR_HEV, CAR.GRANDEUR]:
       can_sends.append(create_lfahda_mfc(self.packer, enabled))
 
     return can_sends

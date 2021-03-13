@@ -17,16 +17,18 @@ class CarInterface(CarInterfaceBase):
     ret = CarInterfaceBase.get_std_params(candidate, fingerprint)
 
     ret.carName = "hyundai"
-    ret.safetyModel = car.CarParams.SafetyModel.hyundai
-    ret.radarOffCan = True
+    ret.safetyModel = car.CarParams.SafetyModel.hyundaiCommunity
+    if candidate in [CAR.GRANDEUR_HEV, CAR.GRANDEUR]:
+      ret.safetyModel = car.CarParams.SafetyModel.hyundai
 
+    ret.radarOffCan = True
     # Most Hyundai car ports are community features for now
     ret.communityFeature = candidate not in [CAR.SONATA, CAR.PALISADE]
 
     ret.steerActuatorDelay = 0.05  # Default delay
-    ret.steerRateCost = 0.5
-    ret.steerLimitTimer = 0.4
-    tire_stiffness_factor = 1.
+    ret.steerRateCost = 0.4
+    ret.steerLimitTimer = 2.0
+    tire_stiffness_factor = 0.8
 
     ret.maxSteeringAngleDeg = 190.
     ret.startAccel = 1.0
@@ -36,27 +38,27 @@ class CarInterface(CarInterfaceBase):
       if fw.ecu == "eps" and b"," in fw.fwVersion:
         eps_modified = True
 
-    if candidate == CAR.GRANDEUR_HEV_19:
+    if candidate == [CAR.GRANDEUR, CAR.GRANDEUR_HEV]:
       ret.mass = 1675. + STD_CARGO_KG
-      ret.wheelbase = 2.845
+      ret.wheelbase = 2.885
       ret.steerRatio = 16.5  #13.96   #12.5
       ret.steerMaxBP = [0., 30*CV.KPH_TO_MS, 50*CV.KPH_TO_MS]
       ret.steerMaxV = [0.8, 1.0, 1.2]
       ret.lateralTuning.pid.kf = 0.000005
   
-      ret.lateralTuning.pid.kpBP, ret.lateralTuning.pid.kpV = [[0.], [0.20]]
+      ret.lateralTuning.pid.kpBP, ret.lateralTuning.pid.kpV = [[0.], [0.25]]
       ret.lateralTuning.pid.kiBP, ret.lateralTuning.pid.kiV = [[0.], [0.01]]
 
       
       ret.lateralTuning.init('lqr')
-      ret.lateralTuning.lqr.scale = 1600.0
+      ret.lateralTuning.lqr.scale = 1500.0
       ret.lateralTuning.lqr.ki = 0.01
       ret.lateralTuning.lqr.dcGain = 0.0027
 
       ret.lateralTuning.lqr.a = [0., 1., -0.22619643, 1.21822268]
       ret.lateralTuning.lqr.b = [-1.92006585e-04, 3.95603032e-05]
       ret.lateralTuning.lqr.c = [1., 0.]
-      ret.lateralTuning.lqr.k = [-110., 451.]
+      ret.lateralTuning.lqr.k = [-110., 450.]
       ret.lateralTuning.lqr.l = [0.33, 0.318]
       
       """
@@ -253,10 +255,8 @@ class CarInterface(CarInterfaceBase):
     # these cars require a special panda safety mode due to missing counters and checksums in the messages
     if ret.radarOffCan or ret.openpilotLongitudinalControl or Params().get('CommunityFeaturesToggle') == b'1':
       ret.safetyModel = car.CarParams.SafetyModel.hyundaiCommunity    
-    elif candidate in [CAR.GRANDEUR_HEV_19,CAR.HYUNDAI_GENESIS, CAR.IONIQ_EV_2020, CAR.IONIQ_EV_LTD, CAR.IONIQ, CAR.KONA_EV, CAR.KIA_SORENTO,
-                     CAR.SONATA_LF, CAR.KIA_NIRO_EV, CAR.KIA_OPTIMA, CAR.VELOSTER, CAR.KIA_STINGER, CAR.KIA_SELTOS,
-                     CAR.GENESIS_G70, CAR.GENESIS_G80, CAR.KIA_CEED]:
-      ret.safetyModel = car.CarParams.SafetyModel.hyundaiLegacy
+    elif candidate in [CAR.GRANDEUR, CAR.GRANDEUR_HEV]  
+      ret.safetyModel = car.CarParams.SafetyModel.hyundaiCommunity
 
     ret.centerToFront = ret.wheelbase * 0.4
 
