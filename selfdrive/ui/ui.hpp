@@ -113,6 +113,8 @@ typedef struct UIScene {
   bool is_rhd;
   bool driver_view;
 
+  float output_scale; 
+  
   std::string alert_text1;
   std::string alert_text2;
   std::string alert_type;
