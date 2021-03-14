@@ -255,7 +255,7 @@ class CarInterface(CarInterfaceBase):
     # these cars require a special panda safety mode due to missing counters and checksums in the messages
     if ret.radarOffCan or ret.openpilotLongitudinalControl or Params().get('CommunityFeaturesToggle') == b'1':
       ret.safetyModel = car.CarParams.SafetyModel.hyundaiCommunity    
-    elif candidate in [CAR.GRANDEUR, CAR.GRANDEUR_HEV]  
+    elif candidate in [CAR.GRANDEUR, CAR.GRANDEUR_HEV] :
       ret.safetyModel = car.CarParams.SafetyModel.hyundaiCommunity
 
     ret.centerToFront = ret.wheelbase * 0.4
