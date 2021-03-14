@@ -147,7 +147,7 @@ static void update_sockets(UIState *s) {
   UIScene &scene = s->scene;
   if (scene.started && sm.updated("controlsState")) {
     scene.controls_state = sm["controlsState"].getControlsState();
-
+    s->scene.output_scale = scene.controls_state.getLateralControlState().getLqrState().getOutput();
 // debug Message
     std::string user_text1 = scene.controls_state.getAlertTextMsg1();
     std::string user_text2 = scene.controls_state.getAlertTextMsg2();
