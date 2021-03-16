@@ -5,10 +5,9 @@ export MKL_NUM_THREADS=1
 export NUMEXPR_NUM_THREADS=1
 export OPENBLAS_NUM_THREADS=1
 export VECLIB_MAXIMUM_THREADS=1
-export QT=1
 
 if [ -z "$REQUIRED_NEOS_VERSION" ]; then
-  export REQUIRED_NEOS_VERSION="16.1"
+  export REQUIRED_NEOS_VERSION="15-1"
 fi
 
 if [ -z "$AGNOS_VERSION" ]; then
