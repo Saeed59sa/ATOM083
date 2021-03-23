@@ -283,6 +283,8 @@ struct DeviceState @0xa4d8b5af2aa492eb {
   offroadPowerUsageUwh @23 :UInt32;
   networkStrength @24 :NetworkStrength;
   carBatteryCapacityUwh @25 :UInt32;
+
+  # atom
   wifiIpAddress @31 :Text;
   
   fanSpeedPercentDesired @10 :UInt16;
@@ -357,6 +359,7 @@ struct PandaState @0xa7649e2575e4591e {
   usbPowerMode @12 :UsbPowerMode;
   ignitionCan @13 :Bool;
   safetyModel @14 :Car.CarParams.SafetyModel;
+  safetyParam @20 :Int16;
   faultStatus @15 :FaultStatus;
   powerSaveEnabled @16 :Bool;
   uptime @17 :UInt32;
@@ -518,6 +521,7 @@ struct ControlsState @0x97ff69c53601abf1 {
   cumLagMs @15 :Float32;
   canErrorCounter @57 :UInt32;
 
+  # atom
   output @59 :Float32;
   alertTextMsg1  @60 :Text;
   alertTextMsg2  @61 :Text;
@@ -789,8 +793,11 @@ struct LateralPlan @0xe1e9318e2ae8b51e {
   laneChangeState @18 :LaneChangeState;
   laneChangeDirection @19 :LaneChangeDirection;
 
-  curvature @22 :Float32; # rad
-  curvatureRate @23 :Float32; # rad/s
+  # curvature is in rad/m
+  curvature @22 :Float32;
+  curvatureRate @23 :Float32;
+  rawCurvature @24 :Float32;
+  rawCurvatureRate @25 :Float32;
 
   enum Desire {
     none @0;

@@ -278,44 +278,31 @@ static void ui_draw_debug(UIState *s)
 {
   UIScene &scene = s->scene;
 
-  int ui_viz_rx = s->viz_rect.x;
- // int ui_viz_rw = s->viz_rect.w;
+  if( scene.dash_menu_no == 0 ) return;
+  
 
 
-
-  //int viz_speed_w = 280;
-  //int viz_speed_x = ui_viz_rx+((ui_viz_rw/2)-(viz_speed_w/2));
-
+  int  ui_viz_rx = s->viz_rect.x;
   int  y_pos = ui_viz_rx + 300;
   int  x_pos = 100+250; 
 
+  float  steerRatio = scene.liveParameters.getSteerRatio();
+  float  fanSpeed = scene.deviceState.getFanSpeedPercentDesired();
 
 
   float  angleOffset = scene.liveParameters.getAngleOffsetDeg();
   float  angleOffsetAverage = scene.liveParameters.getAngleOffsetAverageDeg();
   float  stiffnessFactor = scene.liveParameters.getStiffnessFactor();
-  float  steerRatio = scene.liveParameters.getSteerRatio();
 
 
- // float  planSteerRatio = scene.lateralPlan.getSteerRatio();
+
   float  laneWidth = scene.lateralPlan.getLaneWidth();
+  //float  cpuPerc = scene.deviceState.getCpuUsagePercent();
 
-  float  fanSpeed = scene.deviceState.getFanSpeedPercentDesired();
-  float  cpuPerc = scene.deviceState.getCpuUsagePercent();
-
-
-  
-  //auto cruiseState = scene.car_state.getCruiseState();  
-  //int modeSel = cruiseState.getModeSel();
-  //float model_speed = scene.controls_state.getModelSpeed();
 
   auto lane_line_probs = scene.modelDataV2.getLaneLineProbs();
-  //auto road_edge_stds = scene.modelDataV2.getRoadEdges();
- // float curvature = scene.controls_state.getCurvature();
 
-  nvgTextAlign(s->vg, NVG_ALIGN_LEFT | NVG_ALIGN_BASELINE);
-  if( scene.dash_menu_no  )  
-  {
+    nvgTextAlign(s->vg, NVG_ALIGN_LEFT | NVG_ALIGN_BASELINE);
     nvgFontSize(s->vg, 36*1.5*fFontSize);
 
     //ui_print( s, ui_viz_rx+10, 50, "S:%d",  s->awake_timeout );
@@ -326,10 +313,9 @@ static void ui_draw_debug(UIState *s)
     ui_print( s, x_pos, y_pos+0,   "sR:%.2f  Fan:%.0f", steerRatio,  fanSpeed/1000. );
     ui_print( s, x_pos, y_pos+50,  "aO:%.2f, %.2f", angleOffset, angleOffsetAverage );
     ui_print( s, x_pos, y_pos+100, "sF:%.2f", stiffnessFactor );
-   ui_print( s, x_pos, y_pos+150, "lW:%.2f  cpuPerc:%d", laneWidth, cpuPerc );
+   ui_print( s, x_pos, y_pos+150, "lW:%.2f", laneWidth );
 
     ui_print( s, x_pos, y_pos+250, "prob:%.2f, %.2f, %.2f, %.2f", lane_line_probs[0], lane_line_probs[1], lane_line_probs[2], lane_line_probs[3] );
-   // ui_print( s, x_pos, y_pos+300, "edge:%.2f, %.2f", road_edge_stds[0], road_edge_stds[1] );
 
 
     
@@ -338,47 +324,26 @@ static void ui_draw_debug(UIState *s)
     //ui_print( s, x_pos, y_pos+300, "Poly:%.2f, %.2f = %.2f", scene.pathPlan.lPoly, scene.pathPlan.rPoly, dPoly );
   // ui_print( s, x_pos, y_pos+350, "map:%d,cam:%d", scene.live.map_valid, scene.live.speedlimitahead_valid  );
 
-/*
-    // tpms
-    auto tpms = scene.car_state.getTpms();
-    float fl = tpms.getFl();
-    float fr = tpms.getFr();
-    float rl = tpms.getRl();
-    float rr = tpms.getRr();
-    ui_print( s, x_pos, y_pos+350, "tpms:%.0f,%.0f,%.0f,%.0f", fl, fr, rl, rr );
-*/
 
-    int  lensPos = scene.frame.getLensPos();
-    int  lensTruePos = scene.frame.getLensTruePos();
+    // tpms
+   // auto tpms = scene.car_state.getTpms();
+    //float fl = tpms.getFl();
+    //float fr = tpms.getFr();
+    //float rl = tpms.getRl();
+    //float rr = tpms.getRr();
+    //ui_print( s, x_pos, y_pos+350, "tpms:%.0f,%.0f,%.0f,%.0f", fl, fr, rl, rr );
+
+
+   // int  lensPos = scene.frame.getLensPos();
+   // int  lensTruePos = scene.frame.getLensTruePos();
     //int  lensErr = scene.frame.getLensErr();
-    ui_print( s, x_pos, y_pos+400, "frame:%d,%d", lensPos, lensTruePos );
+  //  ui_print( s, x_pos, y_pos+400, "frame:%d,%d", lensPos, lensTruePos );
 
 
 
     ui_print( s, 0, 1020, "%s", scene.alert.text1 );
     ui_print( s, 0, 1078, "%s", scene.alert.text2 );
-  }
 
-
-/*
-  char str_msg[512];
-  NVGcolor nColor = COLOR_WHITE;
-  x_pos = viz_speed_x + 300;
-  y_pos = 120;
-
-  nvgFontSize(s->vg, 80);
-  switch( modeSel  )
-  {
-    case 0: strcpy( str_msg, "0.OP MODE" ); nColor = COLOR_WHITE; break;
-    case 1: strcpy( str_msg, "1.CURVE" );    nColor = nvgRGBA(200, 200, 255, 255);  break;
-    case 2: strcpy( str_msg, "2.FWD CAR" );  nColor = nvgRGBA(200, 255, 255, 255);  break;
-    case 3: strcpy( str_msg, "3.HYUNDAI" );  nColor = nvgRGBA(200, 255, 255, 255);  break;
-    case 4: strcpy( str_msg, "4.CURVATURE" );   nColor = nvgRGBA(200, 255, 255, 255);  break;
-    default :  sprintf( str_msg, "%d.NORMAL", modeSel ); nColor = COLOR_WHITE;  break;
-  }
-  nvgFillColor(s->vg, nColor);  
-  ui_print( s, x_pos, y_pos+80, str_msg );
-  */
 }
 
 /*
@@ -565,6 +530,7 @@ static void bb_ui_draw_measures_left(UIState *s, int bb_x, int bb_y, int bb_w )
   auto  maxCpuTemp = scene->deviceState.getCpuTempC();
   //auto  maxGpuTemp = scene->deviceState.getGpuTempC();
   float  batteryTemp = scene->deviceState.getBatteryTempC();
+
   //add CPU temperature
 
 
@@ -581,6 +547,7 @@ static void bb_ui_draw_measures_left(UIState *s, int bb_x, int bb_y, int bb_w )
     char uom_str[6];
     NVGcolor val_color = nvgRGBA(255, 255, 255, 200);
     float cpuTemp = maxCpuTemp[0];
+    float  cpuPerc = scene->deviceState.getCpuUsagePercent();
 
       if( cpuTemp > 80) {
         val_color = nvgRGBA(255, 188, 3, 200);
@@ -588,13 +555,17 @@ static void bb_ui_draw_measures_left(UIState *s, int bb_x, int bb_y, int bb_w )
       if(cpuTemp > 92) {
         val_color = nvgRGBA(255, 0, 0, 200);
       }
+
+    //float gpuTemp  = maxGpuTemp[0];
+
       // temp is alway in C * 10
       snprintf(val_str, sizeof(val_str), "%.1f", cpuTemp );
-      snprintf(uom_str, sizeof(uom_str), "");
-    bb_h +=bb_ui_draw_measure(s,  val_str, uom_str, "CPU TEMP",
+      snprintf(uom_str, sizeof(uom_str), "%.0f", cpuPerc);
+      bb_h +=bb_ui_draw_measure(s,  val_str, uom_str, "CPU TEMP",
         bb_rx, bb_ry, bb_uom_dx,
         val_color, lab_color, uom_color,
         value_fontSize, label_fontSize, uom_fontSize );
+
     bb_ry = bb_y + bb_h;
   }
 
